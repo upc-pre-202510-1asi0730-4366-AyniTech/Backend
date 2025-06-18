@@ -3,7 +3,13 @@ using Lot.Inventaries.Application.Internal.QuerysServices;
 using Lot.Inventaries.Domain.Repositories;
 using Lot.Inventaries.Domain.Services;
 using Lot.Inventaries.Infraestructure.Persistence.EFC.Repositories;
+using Lot.ProductManagement.Application.Internal.CommandServices;
+using Lot.ProductManagement.Application.Internal.QueryServices;
+using Lot.ProductManagement.Domain.Repositories;
+using Lot.ProductManagement.Domain.Services;
+using Lot.ProductManagement.Infrastructure.Persistence.EFC.Repositories;
 using Lot.Shared.Domain.Repositories;
+using Lot.Shared.Infrastructure.Persistence.EFC.Seeding;
 using Lot.Shared.Infraestructure.ASP.Configuration.Extensions;
 using Lot.Shared.Infraestructure.Persistence.EFC.Configuration.Extensions;
 using Lot.Shared.Infraestructure.Persistence.EFC.Repositories;
@@ -76,21 +82,51 @@ builder.Services.AddScoped<IInventaryRepository, LotRepository>();
 builder.Services.AddScoped<IInventaryCommandService, InventarieCommandService>();
 builder.Services.AddScoped<IInvetaryQueryService, InventarieQueryService>();
 
+// ProductManagement Bounded Context
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IUnitRepository, UnitRepository>();
+builder.Services.AddScoped<IProductCommandService, ProductCommandService>();
+builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
+
+Console.WriteLine("🚀 Construyendo la aplicación...");
 var app = builder.Build();
+Console.WriteLine("✅ Aplicación construida exitosamente");
 
 // Verifica si la base de datos existe y créala si no existe
+Console.WriteLine("🗄️ Inicializando base de datos...");
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
+    
+    // Crear la base de datos si no existe
+    Console.WriteLine("📊 Creando base de datos si no existe...");
     context.Database.EnsureCreated();
+    Console.WriteLine("✅ Base de datos inicializada correctamente");
+    
+   
+    try
+    {
+        Console.WriteLine("🌱 Iniciando seeding de datos de ejemplo...");
+        await DataSeederService.SeedDataAsync(context);
+        Console.WriteLine("✅ Seeding de datos completado exitosamente");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error durante el seeding de datos: {ex.Message}");
+        Console.WriteLine($"Detalles: {ex.InnerException?.Message}");
+    }
 }
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    Console.WriteLine("🔧 Configurando Swagger para Development...");
     app.UseSwagger();
     app.UseSwaggerUI();
+    Console.WriteLine("✅ Swagger configurado correctamente");
 }
 
 // Apply CORS Policy
