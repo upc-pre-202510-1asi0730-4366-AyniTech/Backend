@@ -89,6 +89,17 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IProductCommandService, ProductCommandService>();
 builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
+builder.Services.AddScoped<IComboRepository, ComboRepository>(); 
+builder.Services.AddScoped<IComboCommandService, ComboCommandService>();
+builder.Services.AddScoped<IComboQueryService, ComboQueryService>();
+
+
+// Registrar repositorios
+builder.Services.AddScoped<IComboRepository, ComboRepository>();
+
+// Registrar servicios
+builder.Services.AddScoped<IComboCommandService, ComboCommandService>();
+builder.Services.AddScoped<IComboQueryService, ComboQueryService>();
 
 Console.WriteLine("🚀 Construyendo la aplicación...");
 var app = builder.Build();
