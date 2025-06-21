@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Sebastian\\RiderProjects\\Backend\\Lot\\Lot.csproj": {}
+    "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Sebastian\\RiderProjects\\Backend\\Lot\\Lot.csproj": {
+    "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Sebastian\\RiderProjects\\Backend\\Lot\\Lot.csproj",
+        "projectUniqueName": "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj",
         "projectName": "Lot",
-        "projectPath": "C:\\Users\\Sebastian\\RiderProjects\\Backend\\Lot\\Lot.csproj",
-        "packagesPath": "C:\\Users\\Sebastian\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Sebastian\\RiderProjects\\Backend\\Lot\\obj\\",
+        "projectPath": "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj",
+        "packagesPath": "C:\\Users\\fabs_\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Sebastian\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\fabs_\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -44,7 +40,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -94,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
