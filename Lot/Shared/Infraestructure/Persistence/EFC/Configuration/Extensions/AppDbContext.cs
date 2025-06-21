@@ -7,11 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lot.Shared.Infraestructure.Persistence.EFC.Configuration.Extensions;
 
+
 /// <summary>
 ///     Contexto de base de datos para la aplicación Lot
 /// </summary>
 public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
+    // En el método OnModelCreating
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
         base.OnConfiguring(builder);
@@ -29,6 +31,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<User>().Property(u => u.Email).IsRequired();
 
         // Configuración de Inventary
+        builder.Entity<Inventary>().HasKey(i => i.Id);
         builder.Entity<Inventary>().Property(i => i.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Inventary>().OwnsOne(i => i.Category, c =>
         {
@@ -49,7 +52,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Inventary>().HasKey(i => i.Id);
 
         // Configuración de ProductManagement entities
-
+        
         // Categories
         builder.Entity<Category>().HasKey(c => c.Id);
         builder.Entity<Category>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
@@ -100,7 +103,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // ProductTags (tabla intermedia)
         builder.Entity<ProductTag>().HasKey(pt => pt.Id);
         builder.Entity<ProductTag>().Property(pt => pt.Id).IsRequired().ValueGeneratedOnAdd();
-
+        
         // Propiedades simples para las claves foráneas
         builder.Entity<ProductTag>().Property(pt => pt.ProductId).HasColumnName("ProductId");
         builder.Entity<ProductTag>().Property(pt => pt.TagId).HasColumnName("TagId");
@@ -213,5 +216,33 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
 
         
+
+        // Configuración de Combos
+        builder.Entity<Combo>().HasKey(c => c.Id);
+        builder.Entity<Combo>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Combo>().Property(c => c.Name).IsRequired().HasMaxLength(200);
+        builder.Entity<Combo>().ToTable("combos");
+
+        // ComboItems
+        builder.Entity<ComboItem>().HasKey(ci => ci.Id);
+        builder.Entity<ComboItem>().Property(ci => ci.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<ComboItem>().Property(ci => ci.ComboId).HasColumnName("ComboId");
+        builder.Entity<ComboItem>().Property(ci => ci.ProductId).HasColumnName("ProductId");
+        builder.Entity<ComboItem>().Property(ci => ci.Quantity).IsRequired();
+
+        // Relaciones de ComboItem
+        builder.Entity<ComboItem>()
+            .HasOne(ci => ci.Combo)
+            .WithMany(c => c.ComboItems)
+            .HasForeignKey(ci => ci.ComboId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ComboItem>()
+            .HasOne(ci => ci.Product)
+            .WithMany()
+            .HasForeignKey(ci => ci.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<ComboItem>().ToTable("combo_items");
     }
 }
