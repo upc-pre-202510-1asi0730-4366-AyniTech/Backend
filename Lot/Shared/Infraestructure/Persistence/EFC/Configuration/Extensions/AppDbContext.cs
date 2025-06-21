@@ -1,6 +1,8 @@
 using Lot.Inventaries.Domain.Model.Aggregates;
 using Lot.ProductManagement.Domain.Model.Aggregates;
+using Lot.Reports.Domain.Model.Aggregates;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Lot.Shared.Infraestructure.Persistence.EFC.Configuration.Extensions;
 
@@ -19,7 +21,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         base.OnModelCreating(builder);
 
         // Configuración de Inventary
-        builder.Entity<Inventary>().HasKey(i => i.Id);
         builder.Entity<Inventary>().Property(i => i.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Inventary>().OwnsOne(i => i.Category, c =>
         {
@@ -37,6 +38,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         {
             s.Property(ps => ps.Name).HasColumnName("SupplierName");
         });
+        builder.Entity<Inventary>().HasKey(i => i.Id);
 
         // Configuración de ProductManagement entities
         
@@ -102,6 +104,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .HasForeignKey(pt => pt.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
 
+
         builder.Entity<ProductTag>()
             .HasOne(pt => pt.Tag)
             .WithMany(t => t.ProductTags)
@@ -114,5 +117,93 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<ProductTag>()
             .HasIndex(pt => new { pt.ProductId, pt.TagId })
             .IsUnique();
+        
+        // Configuración de Report  
+        builder.Entity<Report>().HasKey(r => r.Id);
+        builder.Entity<Report>().Property(r => r.Id)
+            .IsRequired()
+            .ValueGeneratedOnAdd();
+
+// Configurar objeto de valor ReportField
+        builder.Entity<Report>().OwnsOne(r => r.Field, f =>
+        {
+            f.Property(p => p.Name)
+                .HasColumnName("FieldName")
+                .IsRequired()
+                .HasMaxLength(100);
+        });
+
+// Configurar objeto de valor ReportFilter
+        builder.Entity<Report>().OwnsOne(r => r.Filter, f =>
+        {
+            f.Property(p => p.StartDate)
+                .HasColumnName("StartDate")
+                .IsRequired();
+
+            f.Property(p => p.EndDate)
+                .HasColumnName("EndDate")
+                .IsRequired();
+        });
+
+        builder.Entity<Report>().ToTable("reports");
+        
+        // StockAverageReport
+        builder.Entity<StockAverageReport>().HasKey(s => s.Id);
+
+        builder.Entity<StockAverageReport>()
+            .Property(s => s.Id)
+            .IsRequired()
+            .ValueGeneratedNever(); // Porque tú defines el ID en el constructor
+
+        builder.Entity<StockAverageReport>()
+            .Property(s => s.Category)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Entity<StockAverageReport>()
+            .Property(s => s.Product)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Entity<StockAverageReport>()
+            .Property(s => s.AverageQuantity)
+            .IsRequired();
+
+        builder.Entity<StockAverageReport>()
+            .Property(s => s.IdealStock)
+            .IsRequired();
+
+        builder.Entity<StockAverageReport>()
+            .Property(s => s.QueryDate)
+            .IsRequired();
+
+        builder.Entity<StockAverageReport>()
+            .Property(s => s.Status)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Entity<StockAverageReport>()
+            .ToTable("stock_average_reports");
+
+
+// CategoryReport
+        builder.Entity<CategoryReport>().HasKey(c => c.Id);
+        builder.Entity<CategoryReport>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<CategoryReport>().Property(c => c.Category).IsRequired().HasMaxLength(100);
+        builder.Entity<CategoryReport>().Property(c => c.Product).IsRequired().HasMaxLength(100);
+        builder.Entity<CategoryReport>().Property(c => c.Quantity).IsRequired();
+        builder.Entity<CategoryReport>().Property(c => c.UnitPrice).HasColumnType("decimal(10,2)");
+        builder.Entity<CategoryReport>().Property(c => c.Total).HasColumnType("decimal(10,2)");
+        builder.Entity<CategoryReport>().Property(c => c.QueryDate).HasColumnType("date");
+        builder.Entity<CategoryReport>().Property(c => c.ReportId).IsRequired();
+        builder.Entity<CategoryReport>()
+            .HasOne(c => c.Report)
+            .WithMany()
+            .HasForeignKey(c => c.ReportId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<CategoryReport>().ToTable("category_reports");
+
+
+        
     }
 }

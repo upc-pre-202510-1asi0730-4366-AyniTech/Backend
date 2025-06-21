@@ -13,6 +13,12 @@ using Lot.Shared.Infrastructure.Persistence.EFC.Seeding;
 using Lot.Shared.Infraestructure.ASP.Configuration.Extensions;
 using Lot.Shared.Infraestructure.Persistence.EFC.Configuration.Extensions;
 using Lot.Shared.Infraestructure.Persistence.EFC.Repositories;
+using Lot.Reports.Domain.Repositories;
+using Lot.Reports.Domain.Services;
+using Lot.Reports.Application.Internal.CommandServices;
+using Lot.Reports.Infrastructure.Persistence.EFC.Repositories;
+using Lot.Reports.Application.Internal.QueryServices;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -90,6 +96,16 @@ builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IProductCommandService, ProductCommandService>();
 builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
 
+
+// Reports Bounded Context
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
+builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
+builder.Services.AddScoped<IStockAverageQueryService, StockAverageQueryService>();
+builder.Services.AddScoped<ICategoryReportQueryService, CategoryReportQueryService>();
+builder.Services.AddScoped<ICategoryReportRepository, CategoryReportRepository>();
+
+
 Console.WriteLine("🚀 Construyendo la aplicación...");
 var app = builder.Build();
 Console.WriteLine("✅ Aplicación construida exitosamente");
@@ -128,6 +144,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     Console.WriteLine("✅ Swagger configurado correctamente");
 }
+
 
 // Apply CORS Policy
 app.UseCors("AllowAllPolicy");

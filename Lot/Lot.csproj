@@ -18,6 +18,7 @@
     <ItemGroup>
       <Folder Include="Inventaries\Application\ACL\" />
       <Folder Include="Inventaries\Interfaces\ACL\" />
+      <Folder Include="Reports\Infrastructure\" />
     </ItemGroup>
 
 </Project>
