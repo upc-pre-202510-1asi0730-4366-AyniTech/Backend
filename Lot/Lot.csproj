@@ -24,6 +24,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="AlertStockManagement\Application\Internal\CommandServices\" />
+      <Folder Include="AlertStockManagement\Domain\Model\Command\" />
+      <Folder Include="AlertStockManagement\Domain\Model\ValueObjects\" />
+      <Folder Include="AlertStockManagement\Domain\Services\" />
       <Folder Include="Inventaries\Application\ACL\" />
       <Folder Include="Inventaries\Interfaces\ACL\" />
     </ItemGroup>

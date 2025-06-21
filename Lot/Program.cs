@@ -24,7 +24,9 @@ using Lot.Shared.Infraestructure.Persistence.EFC.Configuration.Extensions;
 using Lot.Shared.Infraestructure.Persistence.EFC.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
+using Lot.AlertStockManagement.Application.Internal.QueryServices; 
+using Lot.AlertStockManagement.Domain.Repositories;
+using Lot.AlertStockManagement.Infrastructure.Persistences.EFC.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -106,6 +108,11 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IProductCommandService, ProductCommandService>();
 builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
+
+
+// AlertStockManagement Bounded Context
+builder.Services.AddScoped<IInventoryReadRepository, InventoryReadRepository>();
+builder.Services.AddScoped<StockAlertQueryService>();
 
 Console.WriteLine("🚀 Construyendo la aplicación...");
 var app = builder.Build();
