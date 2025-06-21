@@ -1,5 +1,4 @@
 using Lot.IAM.Domain.Model.Aggregates;
-using Lot.IAM.Domain.Model.Entities;
 using Lot.Inventaries.Domain.Model.Aggregates;
 using Lot.ProductManagement.Domain.Model.Aggregates;
 using Microsoft.EntityFrameworkCore;
@@ -23,19 +22,10 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<User>().HasKey(u => u.Id);
         builder.Entity<User>().Property(u => u.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<User>().Property(u => u.Name).IsRequired();
+        builder.Entity<User>().Property(u => u.LastName).IsRequired();
         builder.Entity<User>().Property(u => u.Password).IsRequired();
         builder.Entity<User>().Property(u => u.Email).IsRequired();
-        
-        builder.Entity<PaymentCard>().HasKey(p => p.Id);
-        builder.Entity<PaymentCard>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<PaymentCard>().Property(p => p.CardNumber).IsRequired();
-        builder.Entity<PaymentCard>().Property(p => p.ExpiryDate).IsRequired();
-        builder.Entity<PaymentCard>().Property(p => p.CVV).IsRequired().HasColumnName("cvv");
-        builder.Entity<PaymentCard>()
-            .HasOne(p => p.User)
-            .WithOne(u => u.PaymentCard)
-            .HasForeignKey<PaymentCard>(p => p.UserId);
-        
+
         // Configuración de Inventary
         builder.Entity<Inventary>().HasKey(i => i.Id);
         builder.Entity<Inventary>().Property(i => i.Id).IsRequired().ValueGeneratedOnAdd();
@@ -57,7 +47,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         });
 
         // Configuración de ProductManagement entities
-        
+
         // Categories
         builder.Entity<Category>().HasKey(c => c.Id);
         builder.Entity<Category>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
@@ -85,7 +75,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Product>().Property(p => p.PurchasePrice).HasColumnType("decimal(10,2)");
         builder.Entity<Product>().Property(p => p.SalePrice).HasColumnType("decimal(10,2)");
         builder.Entity<Product>().Property(p => p.InternalNotes).HasColumnType("text");
-        
+
         // Propiedades simples para las claves foráneas
         builder.Entity<Product>().Property(p => p.CategoryId).HasColumnName("CategoryId");
         builder.Entity<Product>().Property(p => p.UnitId).HasColumnName("UnitId");
@@ -108,7 +98,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // ProductTags (tabla intermedia)
         builder.Entity<ProductTag>().HasKey(pt => pt.Id);
         builder.Entity<ProductTag>().Property(pt => pt.Id).IsRequired().ValueGeneratedOnAdd();
-        
+
         // Propiedades simples para las claves foráneas
         builder.Entity<ProductTag>().Property(pt => pt.ProductId).HasColumnName("ProductId");
         builder.Entity<ProductTag>().Property(pt => pt.TagId).HasColumnName("TagId");

@@ -8,16 +8,9 @@ namespace Lot.IAM.Interfaces.REST.Transform
     {
         public static SignUpCommand ToCommandFromResource(SignUpResource resource)
         {
-            if (!DateTime.TryParseExact(
-                    resource.ExpiryDate,
-                    "MM-yy",
-                    CultureInfo.InvariantCulture, 
-                    DateTimeStyles.None,
-                    out var parsedDate))
-                throw new ArgumentException("Invalid date format. Valid format is MM-yy");
-            
-            return new SignUpCommand(resource.Name, resource.Email, resource.Password, 
-                resource.CardNumber, parsedDate, resource.CVV);
+            //string Name, string LastName, string Email, string Password
+            return new SignUpCommand(resource.Name, resource.LastName, resource.Email,
+                resource.Password);
         }
     }
 }
