@@ -1,3 +1,5 @@
+using Lot.IAM.Domain.Model.Aggregates;
+using Lot.IAM.Domain.Model.Entities;
 using Lot.Inventaries.Domain.Model.Aggregates;
 using Lot.ProductManagement.Domain.Model.Aggregates;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +20,22 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(builder);
 
+        builder.Entity<User>().HasKey(u => u.Id);
+        builder.Entity<User>().Property(u => u.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<User>().Property(u => u.Name).IsRequired();
+        builder.Entity<User>().Property(u => u.Password).IsRequired();
+        builder.Entity<User>().Property(u => u.Email).IsRequired();
+        
+        builder.Entity<PaymentCard>().HasKey(p => p.Id);
+        builder.Entity<PaymentCard>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<PaymentCard>().Property(p => p.CardNumber).IsRequired();
+        builder.Entity<PaymentCard>().Property(p => p.ExpiryDate).IsRequired();
+        builder.Entity<PaymentCard>().Property(p => p.CVV).IsRequired().HasColumnName("cvv");
+        builder.Entity<PaymentCard>()
+            .HasOne(p => p.User)
+            .WithOne(u => u.PaymentCard)
+            .HasForeignKey<PaymentCard>(p => p.UserId);
+        
         // Configuración de Inventary
         builder.Entity<Inventary>().HasKey(i => i.Id);
         builder.Entity<Inventary>().Property(i => i.Id).IsRequired().ValueGeneratedOnAdd();

@@ -1,3 +1,12 @@
+using AyniTech.IAM.Application.QueryServices;
+using Lot.IAM.Application.CommandServices;
+using Lot.IAM.Application.OutBoundServices;
+using Lot.IAM.Domain.Repositories;
+using Lot.IAM.Domain.Services;
+using Lot.IAM.Infrastructure.Hashing.BCrypt.Services;
+using Lot.IAM.Infrastructure.Repositories;
+using Lot.IAM.Infrastructure.Tokens.JWT.Configuration;
+using Lot.IAM.Infrastructure.Tokens.JWT.Services;
 using Lot.Inventaries.Application.Internal.CommandServices;
 using Lot.Inventaries.Application.Internal.QuerysServices;
 using Lot.Inventaries.Domain.Repositories;
@@ -76,6 +85,14 @@ builder.Services.AddSwaggerGen(options =>
 
 // Shared
 builder.Services.AddScoped<IUnitOfWork, UnitOfWorks>();
+
+// IAM Bounded Context Injection Configuration
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 
 // Inventaries Bounded Context
 builder.Services.AddScoped<IInventaryRepository, LotRepository>();
