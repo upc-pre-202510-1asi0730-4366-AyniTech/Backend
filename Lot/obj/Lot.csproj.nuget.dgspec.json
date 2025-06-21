@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj": {}
+    "C:\\Users\\mimim\\OneDrive\\Desktop\\ciclo 6\\aplicaciones web\\Backend\\Lot\\Lot.csproj": {}
   },
   "projects": {
-    "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj": {
+    "C:\\Users\\mimim\\OneDrive\\Desktop\\ciclo 6\\aplicaciones web\\Backend\\Lot\\Lot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj",
+        "projectUniqueName": "C:\\Users\\mimim\\OneDrive\\Desktop\\ciclo 6\\aplicaciones web\\Backend\\Lot\\Lot.csproj",
         "projectName": "Lot",
-        "projectPath": "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj",
-        "packagesPath": "C:\\Users\\fabs_\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\obj\\",
+        "projectPath": "C:\\Users\\mimim\\OneDrive\\Desktop\\ciclo 6\\aplicaciones web\\Backend\\Lot\\Lot.csproj",
+        "packagesPath": "C:\\Users\\mimim\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mimim\\OneDrive\\Desktop\\ciclo 6\\aplicaciones web\\Backend\\Lot\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\fabs_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mimim\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net9.0": {
@@ -61,6 +65,10 @@
             "MySql.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.3, )"
+            },
+            "MySqlConnector": {
+              "target": "Package",
+              "version": "[2.4.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -90,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
