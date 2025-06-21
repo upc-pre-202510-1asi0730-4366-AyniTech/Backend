@@ -1,3 +1,4 @@
+using Lot.IAM.Domain.Model.Aggregates;
 using Lot.Inventaries.Domain.Model.Aggregates;
 using Lot.ProductManagement.Domain.Model.Aggregates;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,13 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<User>().HasKey(u => u.Id);
+        builder.Entity<User>().Property(u => u.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<User>().Property(u => u.Name).IsRequired();
+        builder.Entity<User>().Property(u => u.LastName).IsRequired();
+        builder.Entity<User>().Property(u => u.Password).IsRequired();
+        builder.Entity<User>().Property(u => u.Email).IsRequired();
 
         // Configuración de Inventary
         builder.Entity<Inventary>().HasKey(i => i.Id);
@@ -39,7 +47,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         });
 
         // Configuración de ProductManagement entities
-        
+
         // Categories
         builder.Entity<Category>().HasKey(c => c.Id);
         builder.Entity<Category>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
@@ -67,7 +75,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Product>().Property(p => p.PurchasePrice).HasColumnType("decimal(10,2)");
         builder.Entity<Product>().Property(p => p.SalePrice).HasColumnType("decimal(10,2)");
         builder.Entity<Product>().Property(p => p.InternalNotes).HasColumnType("text");
-        
+
         // Propiedades simples para las claves foráneas
         builder.Entity<Product>().Property(p => p.CategoryId).HasColumnName("CategoryId");
         builder.Entity<Product>().Property(p => p.UnitId).HasColumnName("UnitId");
@@ -90,7 +98,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // ProductTags (tabla intermedia)
         builder.Entity<ProductTag>().HasKey(pt => pt.Id);
         builder.Entity<ProductTag>().Property(pt => pt.Id).IsRequired().ValueGeneratedOnAdd();
-        
+
         // Propiedades simples para las claves foráneas
         builder.Entity<ProductTag>().Property(pt => pt.ProductId).HasColumnName("ProductId");
         builder.Entity<ProductTag>().Property(pt => pt.TagId).HasColumnName("TagId");
