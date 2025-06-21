@@ -22,6 +22,12 @@ using Lot.Shared.Infrastructure.Persistence.EFC.Seeding;
 using Lot.Shared.Infraestructure.ASP.Configuration.Extensions;
 using Lot.Shared.Infraestructure.Persistence.EFC.Configuration.Extensions;
 using Lot.Shared.Infraestructure.Persistence.EFC.Repositories;
+using Lot.Reports.Domain.Repositories;
+using Lot.Reports.Domain.Services;
+using Lot.Reports.Application.Internal.CommandServices;
+using Lot.Reports.Infrastructure.Persistence.EFC.Repositories;
+using Lot.Reports.Application.Internal.QueryServices;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Lot.AlertStockManagement.Application.Internal.QueryServices; 
@@ -108,6 +114,16 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 builder.Services.AddScoped<IProductCommandService, ProductCommandService>();
 builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
+
+
+// Reports Bounded Context
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
+builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
+builder.Services.AddScoped<IStockAverageQueryService, StockAverageQueryService>();
+builder.Services.AddScoped<ICategoryReportQueryService, CategoryReportQueryService>();
+builder.Services.AddScoped<ICategoryReportRepository, CategoryReportRepository>();
+
 
 
 // AlertStockManagement Bounded Context
