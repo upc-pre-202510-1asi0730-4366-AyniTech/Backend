@@ -1,21 +1,28 @@
-
+//*
 using Lot.Reports.Domain.Model.Aggregates;
+using Lot.Reports.Domain.Model.Queries;
 using Lot.Reports.Domain.Repositories;
 using Lot.Reports.Domain.Services;
 
 namespace Lot.Reports.Application.Internal.QueryServices;
 
-public class CategoryReportQueryService : ICategoryReportQueryService
+/// <summary>
+/// Query service for Category Reports
+/// </summary>
+public class CategoryReportQueryService(ICategoryReportRepository repository)
+    : ICategoryReportQueryService
 {
-    private readonly ICategoryReportRepository _repository;
-
-    public CategoryReportQueryService(ICategoryReportRepository repository)
+    public async Task<IEnumerable<CategoryReport>> Handle(GetAllCategoryReportsQuery query)
     {
-        _repository = repository;
+        return await repository.FindAllAsync();
     }
 
-    public async Task<IEnumerable<CategoryReport>> ListAsync()
+    public async Task<IEnumerable<CategoryReport>> Handle(GetCategoryReportsByDateQuery query)
     {
-        return await _repository.ListAsync();
+        return await repository.FindByDateAsync(query.FechaConsulta);
+    }
+    public async Task<CategoryReport?> Handle(GetCategoryReportByIdQuery query)
+    {
+        return await repository.FindByIdAsync(query.Id);
     }
 }

@@ -12,6 +12,7 @@ using Lot.Inventaries.Application.Internal.QuerysServices;
 using Lot.Inventaries.Domain.Repositories;
 using Lot.Inventaries.Domain.Services;
 using Lot.Inventaries.Infraestructure.Persistence.EFC.Repositories;
+
 using Lot.ProductManagement.Application.Internal.CommandServices;
 using Lot.ProductManagement.Application.Internal.QueryServices;
 using Lot.ProductManagement.Domain.Repositories;
@@ -32,7 +33,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Lot.AlertStockManagement.Application.Internal.QueryServices; 
 using Lot.AlertStockManagement.Domain.Repositories;
-using Lot.AlertStockManagement.Infrastructure.Persistences.EFC.Repositories;
+using Lot.AlertStockManagement.Infraestructure.Persistence.EFC.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -103,9 +104,14 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 
 // Inventaries Bounded Context
-builder.Services.AddScoped<IInventaryRepository, LotRepository>();
-builder.Services.AddScoped<IInventaryCommandService, InventarieCommandService>();
-builder.Services.AddScoped<IInvetaryQueryService, InventarieQueryService>();
+builder.Services.AddScoped<IInventoryByProductRepository, InventoryByProductRepository>();
+builder.Services.AddScoped<IInventoryByBatchRepository, InventoryByBatchRepository>();
+
+builder.Services.AddScoped<IInventoryByProductCommandService, InventoryByProductCommandService>();
+builder.Services.AddScoped<IInventoryByBatchCommandService, InventoryByBatchCommandService>();
+
+builder.Services.AddScoped<IInventoryByProductQueryService, InventoryByProductQueryService>();
+builder.Services.AddScoped<IInventoryByBatchQueryService, InventoryByBatchQueryService>();
 
 // ProductManagement Bounded Context
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -128,45 +134,45 @@ builder.Services.AddScoped<IComboQueryService, ComboQueryService>();
 
 
 // Reports Bounded Context
-builder.Services.AddScoped<IReportRepository, ReportRepository>();
-builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
-builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
-builder.Services.AddScoped<IStockAverageQueryService, StockAverageQueryService>();
-builder.Services.AddScoped<ICategoryReportQueryService, CategoryReportQueryService>();
-builder.Services.AddScoped<ICategoryReportRepository, CategoryReportRepository>();
 
+builder.Services.AddScoped<IStockAverageReportCommandService, StockAverageReportCommandService>();
+builder.Services.AddScoped<ICategoryReportCommandService, CategoryReportCommandService>();
+builder.Services.AddScoped<IStockAverageReportQueryService, StockAverageReportQueryService>();
+builder.Services.AddScoped<ICategoryReportQueryService, CategoryReportQueryService>();
+builder.Services.AddScoped<IStockAverageReportRepository, StockAverageReportRepository>();
+builder.Services.AddScoped<ICategoryReportRepository, CategoryReportRepository>();
 
 
 // AlertStockManagement Bounded Context
 builder.Services.AddScoped<IInventoryReadRepository, InventoryReadRepository>();
 builder.Services.AddScoped<StockAlertQueryService>();
 
-Console.WriteLine("🚀 Construyendo la aplicación...");
+Console.WriteLine("Construyendo la aplicación...");
 var app = builder.Build();
-Console.WriteLine("✅ Aplicación construida exitosamente");
+Console.WriteLine("Aplicación construida exitosamente");
 
 // Verifica si la base de datos existe y créala si no existe
-Console.WriteLine("🗄️ Inicializando base de datos...");
+Console.WriteLine("Inicializando base de datos...");
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
     
     // Crear la base de datos si no existe
-    Console.WriteLine("📊 Creando base de datos si no existe...");
+    Console.WriteLine("Creando base de datos si no existe...");
     context.Database.EnsureCreated();
-    Console.WriteLine("✅ Base de datos inicializada correctamente");
+    Console.WriteLine("Base de datos inicializada correctamente");
     
    
     try
     {
-        Console.WriteLine("🌱 Iniciando seeding de datos de ejemplo...");
+        Console.WriteLine("Iniciando seeding de datos de ejemplo...");
         await DataSeederService.SeedDataAsync(context);
-        Console.WriteLine("✅ Seeding de datos completado exitosamente");
+        Console.WriteLine("Seeding de datos completado exitosamente");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"❌ Error durante el seeding de datos: {ex.Message}");
+        Console.WriteLine($"Error durante el seeding de datos: {ex.Message}");
         Console.WriteLine($"Detalles: {ex.InnerException?.Message}");
     }
 }
