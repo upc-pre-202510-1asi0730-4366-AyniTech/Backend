@@ -1,26 +1,41 @@
+//*
 namespace Lot.Reports.Domain.Model.Aggregates;
 
+/// <summary>
+/// Agregado raíz que representa un reporte por categoría.
+/// </summary>
 public class CategoryReport
 {
     public int Id { get; private set; }
-    public int ReportId { get; private set; }
-    public string Category { get; private set; }
-    public string Product { get; private set; }
-    public int Quantity { get; private set; }
-    public decimal UnitPrice { get; private set; }
-    public decimal Total { get; private set; }
-    public DateOnly QueryDate { get; private set; }
+    public string Categoria { get; private set; }
+    public string Producto { get; private set; }
+    public DateTime FechaConsulta { get; private set; }
+    public decimal PrecioUnitario { get; private set; }
+    public int Cantidad { get; private set; }
+    public decimal Total => PrecioUnitario * Cantidad;
 
-    public CategoryReport(int reportId, string category, string product, int quantity, decimal unitPrice, decimal total, DateOnly queryDate)
+    public CategoryReport()
     {
-        ReportId = reportId;
-        Category = category;
-        Product = product;
-        Quantity = quantity;
-        UnitPrice = unitPrice;
-        Total = total;
-        QueryDate = queryDate;
+        Categoria = string.Empty;
+        Producto = string.Empty;
     }
 
-    public Report Report { get; private set; } 
+    public CategoryReport(string categoria, string producto, DateTime fechaConsulta, decimal precioUnitario, int cantidad)
+    {
+        Categoria = categoria;
+        Producto = producto;
+        FechaConsulta = fechaConsulta;
+        PrecioUnitario = precioUnitario;
+        Cantidad = cantidad;
+    }
+
+    public void UpdateCantidad(int nuevaCantidad)
+    {
+        Cantidad = nuevaCantidad;
+    }
+
+    public void UpdatePrecio(decimal nuevoPrecio)
+    {
+        PrecioUnitario = nuevoPrecio;
+    }
 }

@@ -4,5 +4,8 @@ namespace Lot.Reports.Domain.Repositories;
 
 public interface ICategoryReportRepository
 {
-    Task<IEnumerable<CategoryReport>> ListAsync();
+    Task<IEnumerable<CategoryReport>> FindAllAsync();
+    Task<IEnumerable<CategoryReport>> FindByDateAsync(DateTime fechaConsulta);
+    Task AddAsync(CategoryReport report);
+    Task<CategoryReport?> FindByIdAsync(int id);
 }
