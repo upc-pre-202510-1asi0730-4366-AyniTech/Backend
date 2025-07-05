@@ -177,14 +177,11 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    Console.WriteLine("Configurando Swagger para Development...");
+
+
     app.UseSwagger();
     app.UseSwaggerUI();
-    Console.WriteLine("Swagger configurado correctamente");
-}
+
 
 // Apply CORS Policy
 app.UseCors("AllowAllPolicy");
