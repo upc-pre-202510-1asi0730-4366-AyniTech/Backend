@@ -94,6 +94,37 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.EnableAnnotations();
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "JWT token — escribe solo el token, el prefijo 'Bearer' se agrega automáticamente.",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,       // 👈 Tipo correcto
+        Scheme = "bearer",                    // 👈 Esquema correcto
+        BearerFormat = "JWT"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+/*
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1",
@@ -146,7 +177,7 @@ builder.Services.AddSwaggerGen(options =>
 
     options.EnableAnnotations();
 });
-
+*/
 // Dependency Injection
 
 // Shared
