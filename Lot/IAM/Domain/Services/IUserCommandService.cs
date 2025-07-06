@@ -6,7 +6,8 @@ namespace Lot.IAM.Domain.Services
     public interface IUserCommandService
     {
         Task<User?> Handle(SignUpCommand command);
-        Task<(User? user, string token)> Handle(SignInCommand command); 
+        Task<(User? user, string token)> Handle(SignInCommand command);
+        Task<User?> Handle(ChangeUserRoleCommand command);
     }
 }
 

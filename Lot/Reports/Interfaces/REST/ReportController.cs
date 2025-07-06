@@ -5,7 +5,9 @@ using Lot.Reports.Domain.Model.Commands;
 using Lot.Reports.Interfaces.REST.Resources;
 using Lot.Reports.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
+using Lot.IAM.Infrastructure.Authorization;
 
 namespace Lot.Reports.Interfaces.REST;
 
@@ -13,6 +15,7 @@ namespace Lot.Reports.Interfaces.REST;
 [Route("api/v1/reports")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Puntos de acceso disponibles para la gestión de reportes de categoría y de stock promedio.")]
+[AuthorizeRoles("Administrator")]
 public class ReportController(
     ICategoryReportCommandService categoryCmdService,
     ICategoryReportQueryService categoryQryService,

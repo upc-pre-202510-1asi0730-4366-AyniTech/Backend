@@ -7,6 +7,6 @@ namespace Lot.IAM.Domain.Repositories
     {
         Task<User?> FindByEmailAsync(string email); 
         Task AddAsync(User user);
+        Task UpdateUserRoleAsync(int userId, UserRole newRole);
     }
-
 }

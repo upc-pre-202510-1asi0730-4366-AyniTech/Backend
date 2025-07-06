@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
 using Lot.Inventaries.Domain.Model.Aggregates;
@@ -6,7 +7,8 @@ using Lot.Inventaries.Domain.Model.Commands;
 using Lot.Inventaries.Domain.Model.Queries;
 using Lot.Inventaries.Domain.Services;
 using Lot.Inventaries.Interfaces.REST.Resources;
-using Lot.Inventaries.Interfaces.REST.Transform; 
+using Lot.Inventaries.Interfaces.REST.Transform;
+using Lot.IAM.Infrastructure.Authorization; 
 
 
 namespace Lot.Inventaries.Interfaces.REST;
@@ -15,6 +17,7 @@ namespace Lot.Inventaries.Interfaces.REST;
 [Route("api/v1/inventory")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Operaciones del inventario general, por producto y por lote.")]
+[AuthorizeRoles("Administrator")]
 public class InventoryController : ControllerBase
 {
     private readonly IInventoryByProductCommandService _productCommandService;

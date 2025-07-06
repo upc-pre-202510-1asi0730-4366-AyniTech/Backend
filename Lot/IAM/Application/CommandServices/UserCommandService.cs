@@ -39,7 +39,22 @@ namespace Lot.IAM.Application.CommandServices
                 throw new Exception("Invalid credentials");
             
             var token = tokenService.GenerateToken(user);
-            return (user, user.Password);
+            return (user, token);
+        }
+
+        public async Task<User?> Handle(ChangeUserRoleCommand command)
+        {
+            var user = await userRepository.FindByIdAsync(command.UserId);
+            
+            if (user == null)
+                throw new Exception("User not found");
+            
+            // Aquí necesitarías actualizar el rol del usuario
+            // Por ahora, como las propiedades son privadas, necesitamos un método en el repositorio
+            await userRepository.UpdateUserRoleAsync(command.UserId, command.NewRole);
+            await unitOfWork.CompleteAsync();
+            
+            return await userRepository.FindByIdAsync(command.UserId);
         }
     }
 }
