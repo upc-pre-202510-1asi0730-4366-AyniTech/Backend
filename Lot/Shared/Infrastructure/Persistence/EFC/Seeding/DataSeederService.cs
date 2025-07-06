@@ -171,15 +171,15 @@ public static class DataSeederService
         Console.WriteLine("🔍 Verificando si existen productos...");
         var existingCount = await context.Set<Product>().CountAsync();
         Console.WriteLine($"📊 Productos existentes: {existingCount}");
-        
-        if (existingCount > 0) 
+
+        if (existingCount > 0)
         {
             Console.WriteLine("ℹ️ Los productos ya existen, saltando seeding de productos");
             return;
         }
 
         Console.WriteLine("➕ Creando nuevos productos...");
-        
+
         try
         {
             // Obtener IDs de las entidades relacionadas
@@ -188,13 +188,13 @@ public static class DataSeederService
             var categoria_lacteos = await context.Set<Category>().FirstAsync(c => c.Name == "Lácteos");
             Console.WriteLine($"🏷️ Categoría Bebidas ID: {categoria_bebidas.Id}");
             Console.WriteLine($"🏷️ Categoría Lácteos ID: {categoria_lacteos.Id}");
-            
+
             Console.WriteLine("📏 Buscando unidades de medida para relacionar...");
             var unidad_litros = await context.Set<Unit>().FirstAsync(u => u.Abbreviation == "L");
             var unidad_ml = await context.Set<Unit>().FirstAsync(u => u.Abbreviation == "ml");
             Console.WriteLine($"📏 Unidad Litros ID: {unidad_litros.Id}");
             Console.WriteLine($"📏 Unidad ML ID: {unidad_ml.Id}");
-            
+
             Console.WriteLine("🏷️ Buscando etiquetas para asignar...");
             var tag_premium = await context.Set<Tag>().FirstAsync(t => t.Name == "Premium");
             var tag_promocion = await context.Set<Tag>().FirstAsync(t => t.Name == "Promoción");
@@ -202,7 +202,7 @@ public static class DataSeederService
             Console.WriteLine($"🏷️ Tag Premium ID: {tag_premium.Id}");
             Console.WriteLine($"🏷️ Tag Promoción ID: {tag_promocion.Id}");
             Console.WriteLine($"🏷️ Tag Local ID: {tag_local.Id}");
-            
+
             var productos = new List<Product>
             {
                 new Product(
@@ -236,21 +236,22 @@ public static class DataSeederService
 
             foreach (var producto in productos)
             {
-                Console.WriteLine($"🔸 Producto: {producto.Name} - Precio Compra: ${producto.PurchasePrice} / Precio Venta: ${producto.SalePrice}");
+                Console.WriteLine(
+                    $"🔸 Producto: {producto.Name} - Precio Compra: ${producto.PurchasePrice} / Precio Venta: ${producto.SalePrice}");
                 await context.Set<Product>().AddAsync(producto);
             }
 
             Console.WriteLine("💾 Guardando productos en la base de datos...");
             var changes = await context.SaveChangesAsync();
             Console.WriteLine($"✨ Se guardaron {changes} cambios de productos");
-            
+
             // Ahora agregar tags a los productos
             Console.WriteLine("🏷️ Asignando tags a los productos...");
-            var productosGuardados = await context.Set<Product>().Where(p => 
-                p.Name == "Leche Entera Gloria" || 
-                p.Name == "Agua San Luis" || 
+            var productosGuardados = await context.Set<Product>().Where(p =>
+                p.Name == "Leche Entera Gloria" ||
+                p.Name == "Agua San Luis" ||
                 p.Name == "Coca Cola").ToListAsync();
-            
+
             var productTags = new List<ProductTag>
             {
                 new ProductTag(productosGuardados.First(p => p.Name == "Leche Entera Gloria").Id, tag_premium.Id),
@@ -267,7 +268,7 @@ public static class DataSeederService
             Console.WriteLine("💾 Guardando relaciones producto-tag en la base de datos...");
             var tagChanges = await context.SaveChangesAsync();
             Console.WriteLine($"✨ Se guardaron {tagChanges} cambios de tags");
-            
+
             Console.WriteLine("✅ Productos de ejemplo inicializados correctamente");
         }
         catch (Exception ex)
@@ -277,4 +278,5 @@ public static class DataSeederService
             throw;
         }
     }
+    
 } 
