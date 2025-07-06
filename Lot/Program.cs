@@ -34,6 +34,10 @@ using Microsoft.OpenApi.Models;
 using Lot.AlertStockManagement.Application.Internal.QueryServices; 
 using Lot.AlertStockManagement.Domain.Repositories;
 using Lot.AlertStockManagement.Infraestructure.Persistence.EFC.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -49,6 +53,29 @@ builder.Services.AddCors(options =>
         policy => policy.AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader());
+});
+
+// Configure JWT Authentication
+var tokenSettings = builder.Configuration.GetSection("TokenSettings").Get<TokenSettings>();
+var key = Encoding.ASCII.GetBytes(tokenSettings?.Secret ?? "default-secret-key");
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ClockSkew = TimeSpan.Zero
+    };
 });
 
 if (connectionString == null) throw new InvalidOperationException("Connection string not found.");
@@ -188,6 +215,8 @@ app.UseCors("AllowAllPolicy");
 
 app.UseHttpsRedirection();
 
+// Add Authentication middleware before Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

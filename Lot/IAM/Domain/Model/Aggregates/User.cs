@@ -2,6 +2,12 @@
 
 namespace Lot.IAM.Domain.Model.Aggregates
 {
+    public enum UserRole
+    {
+        Employee = 0,
+        Administrator = 1
+    }
+
     public class User
     {
         public int Id { get; private set; }
@@ -9,6 +15,7 @@ namespace Lot.IAM.Domain.Model.Aggregates
         public string LastName { get; private set; }
         public string Email { get; private set; }
         public string Password { get; private set; }
+        public UserRole Role { get; private set; }
 
         public User()
         {
@@ -16,6 +23,7 @@ namespace Lot.IAM.Domain.Model.Aggregates
             LastName = string.Empty;
             Email = string.Empty;
             Password = string.Empty;
+            Role = UserRole.Employee; // Por defecto es empleado
         }
 
         public User(SignInCommand command)
@@ -30,6 +38,7 @@ namespace Lot.IAM.Domain.Model.Aggregates
             Name = command.Name;
             Email = command.Email;
             Password = command.Password;
+            Role = UserRole.Employee; // Por defecto es empleado
         } 
     }
 }

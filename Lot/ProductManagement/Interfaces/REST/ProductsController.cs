@@ -4,7 +4,9 @@ using Lot.ProductManagement.Domain.Services;
 using Lot.ProductManagement.Interfaces.REST.Resources;
 using Lot.ProductManagement.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
+using Lot.IAM.Infrastructure.Authorization;
 
 namespace Lot.ProductManagement.Interfaces.REST;
 
@@ -12,6 +14,7 @@ namespace Lot.ProductManagement.Interfaces.REST;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Puntos de acceso disponibles para la gestión de productos.")]
+[AuthorizeRoles("Employee")]
 public class ProductsController(
     IProductCommandService productCommandService,
     IProductQueryService productQueryService)

@@ -53,6 +53,27 @@ namespace Lot.IAM.Interfaces.REST
             var authenticatedUserResource = AuthenticatedUserResourceFromEntityAssembler.ToResourceFromEntity(authenticatedUser.user, authenticatedUser.token);
             return Ok(authenticatedUserResource);
         }
+
+        [HttpPut("change-role")]
+        [SwaggerOperation(
+            Summary = "Change user role",
+            Description = "Changes the role of a user between Employee and Administrator.",
+            OperationId = "ChangeUserRole"
+        )]
+        [SwaggerResponse(200, "User role changed successfully", typeof(UserResource))]
+        [SwaggerResponse(400, "Invalid request or user not found.")]
+        [SwaggerResponse(500, "Unexpected error while changing user role.")]
+        [Authorize]
+        public async Task<ActionResult> ChangeUserRole([FromBody] ChangeUserRoleResource resource)
+        {
+            var changeRoleCommand = ChangeUserRoleCommandFromResourceAssembler.ToCommandFromResource(resource);
+            var result = await userCommandService.Handle(changeRoleCommand);
+
+            if (result is null) return BadRequest("Failed to change user role. User not found.");
+
+            var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(result);
+            return Ok(userResource);
+        }
     }
 }
 
