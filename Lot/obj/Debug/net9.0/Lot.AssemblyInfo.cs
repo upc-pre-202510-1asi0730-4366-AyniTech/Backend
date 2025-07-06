@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Lot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e0840711463eb789b44a242c2c1d95cb6ef6015")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0028d60206d1839dab19c12a36e5883e3b88142b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Lot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Lot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
