@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj": {}
+    "C:\\Users\\USUARIO\\Desktop\\Backend\\Lot\\Lot.csproj": {}
   },
   "projects": {
-    "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj": {
+    "C:\\Users\\USUARIO\\Desktop\\Backend\\Lot\\Lot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj",
+        "projectUniqueName": "C:\\Users\\USUARIO\\Desktop\\Backend\\Lot\\Lot.csproj",
         "projectName": "Lot",
-        "projectPath": "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\Lot.csproj",
-        "packagesPath": "C:\\Users\\fabs_\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\fabs_\\OneDrive\\Documentos\\UPC\\APPS WEB\\Backend\\Lot\\obj\\",
+        "projectPath": "C:\\Users\\USUARIO\\Desktop\\Backend\\Lot\\Lot.csproj",
+        "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USUARIO\\Desktop\\Backend\\Lot\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\fabs_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USUARIO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,7 +40,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -90,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\USUARIO\\.dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
