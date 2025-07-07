@@ -17,7 +17,7 @@ namespace Lot.Inventaries.Interfaces.REST;
 [Route("api/v1/inventory")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Operaciones del inventario general, por producto y por lote.")]
-[AuthorizeRoles("Administrator")]
+[AuthorizeRoles("Administrator", "Employee")]
 public class InventoryController : ControllerBase
 {
     private readonly IInventoryByProductCommandService _productCommandService;

@@ -4,6 +4,7 @@ using Lot.IAM.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Lot.IAM.Infrastructure.Authorization;
 
 namespace Lot.IAM.Interfaces.REST
 {
@@ -77,7 +78,7 @@ namespace Lot.IAM.Interfaces.REST
         [SwaggerResponse(200, "User role changed successfully", typeof(UserResource))]
         [SwaggerResponse(400, "Invalid request or user not found.")]
         [SwaggerResponse(500, "Unexpected error while changing user role.")]
-        [Authorize]
+        [AuthorizeRoles("Administrator")]
         public async Task<ActionResult> ChangeUserRole([FromBody] ChangeUserRoleResource resource)
         {
             var changeRoleCommand = ChangeUserRoleCommandFromResourceAssembler.ToCommandFromResource(resource);

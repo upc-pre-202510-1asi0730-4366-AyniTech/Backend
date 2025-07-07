@@ -5,6 +5,7 @@ using Lot.ProductManagement.Domain.Services;
 using Lot.ProductManagement.Interfaces.REST.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Lot.IAM.Infrastructure.Authorization;
 
 namespace Lot.ProductManagement.Interfaces.REST;
 
@@ -12,6 +13,7 @@ namespace Lot.ProductManagement.Interfaces.REST;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Puntos de acceso disponibles para la gestión de combos (kits).")]
+[AuthorizeRoles("Administrator", "Employee")]
 public class CombosController(
     IComboCommandService comboCommandService,
     IComboQueryService comboQueryService)
