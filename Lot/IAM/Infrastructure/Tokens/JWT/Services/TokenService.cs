@@ -15,23 +15,42 @@ namespace Lot.IAM.Infrastructure.Tokens.JWT.Services
 
         public string GenerateToken(User user)
         {
+            Console.WriteLine("🎫 Generando token para usuario:");
+            Console.WriteLine($"   - ID: {user.Id}");
+            Console.WriteLine($"   - Nombre: {user.Name}");
+            Console.WriteLine($"   - Rol: {user.Role}");
+
             var secret = _tokenSettings.Secret;
             var key = Encoding.ASCII.GetBytes(secret);
+
+            // Creamos los claims
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Sid, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                new Claim("role", user.Role.ToString()) // Mantenemos este para compatibilidad
+            };
+
+            Console.WriteLine("📜 Claims generados:");
+            foreach (var claim in claims)
+            {
+                Console.WriteLine($"   - {claim.Type}: {claim.Value}");
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Sid, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Name),
-                    new Claim("role", user.Role.ToString())
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials =
-                    new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key), 
+                    SecurityAlgorithms.HmacSha256Signature)
             };
-            var tokenHandler = new JsonWebTokenHandler();
 
+            var tokenHandler = new JsonWebTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            
+            Console.WriteLine("✅ Token generado exitosamente");
             return token;
         }
 
@@ -44,32 +63,45 @@ namespace Lot.IAM.Infrastructure.Tokens.JWT.Services
          */
         public async Task<int?> ValidateToken(string token)
         {
-            // If token is null or empty
+            Console.WriteLine("🔍 Iniciando validación de token");
+            
             if (string.IsNullOrEmpty(token))
-                // Return null 
+            {
+                Console.WriteLine("❌ Token nulo o vacío");
                 return null;
-            // Otherwise, perform validation
+            }
+
             var tokenHandler = new JsonWebTokenHandler();
             var key = Encoding.ASCII.GetBytes(_tokenSettings.Secret);
             try
             {
+                Console.WriteLine("🔐 Validando token con parámetros configurados");
                 var tokenValidationResult = await tokenHandler.ValidateTokenAsync(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    // Expiration without delay
                     ClockSkew = TimeSpan.Zero
                 });
 
                 var jwtToken = (JsonWebToken)tokenValidationResult.SecurityToken;
                 var userId = int.Parse(jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Sid).Value);
+                
+                Console.WriteLine($"✅ Token válido para usuario ID: {userId}");
+                Console.WriteLine("🔍 Claims en el token:");
+                foreach (var claim in jwtToken.Claims)
+                {
+                    Console.WriteLine($"   - {claim.Type}: {claim.Value}");
+                }
+                
                 return userId;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine("❌ Error validando token:");
+                Console.WriteLine($"   {e.Message}");
+                Console.WriteLine($"   {e.StackTrace}");
                 return null;
             }
         }

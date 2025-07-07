@@ -37,6 +37,7 @@ using Lot.AlertStockManagement.Infraestructure.Persistence.EFC.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,7 +67,6 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -74,9 +74,42 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
         ValidateAudience = false,
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
+        NameClaimType = ClaimTypes.Name,
+        RoleClaimType = ClaimTypes.Role
+    };
+    
+    options.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("🔐 Token validado exitosamente");
+            var claims = context.Principal.Claims;
+            Console.WriteLine("📜 Claims del token:");
+            foreach (var claim in claims)
+            {
+                Console.WriteLine($"   - {claim.Type}: {claim.Value}");
+            }
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine("❌ Fallo en la autenticación del token:");
+            Console.WriteLine($"   Error: {context.Exception.Message}");
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            Console.WriteLine("🚫 Desafío de autenticación:");
+            Console.WriteLine($"   Error: {context.Error}");
+            Console.WriteLine($"   Error Description: {context.ErrorDescription}");
+            return Task.CompletedTask;
+        }
     };
 });
+
+// Add Authorization
+builder.Services.AddAuthorization();
 
 if (connectionString == null) throw new InvalidOperationException("Connection string not found.");
 
@@ -265,18 +298,18 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
-
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
+}
 
-
-// Apply CORS Policy
 app.UseCors("AllowAllPolicy");
 
 app.UseHttpsRedirection();
 
-// Add Authentication middleware before Authorization
+// Importante: UseAuthentication debe ir ANTES de UseAuthorization
 app.UseAuthentication();
 app.UseAuthorization();
 

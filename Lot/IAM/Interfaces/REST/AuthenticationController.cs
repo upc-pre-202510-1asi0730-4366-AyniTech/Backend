@@ -7,6 +7,8 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Lot.IAM.Interfaces.REST
 {
+    [ApiController]
+    [Route("api/v1/[controller]")]
     public class AuthenticationController(IUserCommandService userCommandService) : ControllerBase
     {
         [HttpPost("sign-up")]
@@ -45,10 +47,22 @@ namespace Lot.IAM.Interfaces.REST
         [AllowAnonymous]
         public async Task<ActionResult> SignIn([FromBody] SignInResource resource)
         {
+            Console.WriteLine("🔑 Intento de inicio de sesión:");
+            Console.WriteLine($"   Email: {resource.Email}");
+
             var signInCommand = SignInCommandFromResourceAssembler.ToCommandFromResource(resource);
             var authenticatedUser = await userCommandService.Handle(signInCommand);
             
-            if (authenticatedUser.user is null) return BadRequest("Failed to authenticate user.");
+            if (authenticatedUser.user is null)
+            {
+                Console.WriteLine("❌ Fallo en la autenticación");
+                return BadRequest("Failed to authenticate user.");
+            }
+
+            Console.WriteLine("✅ Usuario autenticado exitosamente:");
+            Console.WriteLine($"   ID: {authenticatedUser.user.Id}");
+            Console.WriteLine($"   Nombre: {authenticatedUser.user.Name}");
+            Console.WriteLine($"   Rol: {authenticatedUser.user.Role}");
             
             var authenticatedUserResource = AuthenticatedUserResourceFromEntityAssembler.ToResourceFromEntity(authenticatedUser.user, authenticatedUser.token);
             return Ok(authenticatedUserResource);
