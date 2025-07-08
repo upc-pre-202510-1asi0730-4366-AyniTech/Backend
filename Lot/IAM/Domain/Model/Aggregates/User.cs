@@ -23,7 +23,7 @@ namespace Lot.IAM.Domain.Model.Aggregates
             LastName = string.Empty;
             Email = string.Empty;
             Password = string.Empty;
-            Role = UserRole.Employee; // Por defecto es empleado
+            Role = UserRole.Administrator; // Por defecto es administrador
         }
 
         public User(SignInCommand command)
@@ -38,7 +38,7 @@ namespace Lot.IAM.Domain.Model.Aggregates
             Name = command.Name;
             Email = command.Email;
             Password = command.Password;
-            Role = UserRole.Employee; // Por defecto es empleado
+            Role = UserRole.Administrator; // Por defecto es administrador
         } 
     }
 }

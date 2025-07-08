@@ -70,11 +70,23 @@ public class InventoryController : ControllerBase
     }
 
     [HttpGet("by-product")]
-    [SwaggerOperation("Listar todos los Inventarios por Producto", OperationId = "ListInventoryByProduct")]
+    [SwaggerOperation("Listar todos los Inventarios por Producto con filtros", OperationId = "ListInventoryByProduct")]
     [SwaggerResponse(StatusCodes.Status200OK, "Lista obtenida.", typeof(IEnumerable<InventoryByProduct>))]
-    public async Task<IActionResult> GetAllByProduct()
+    public async Task<IActionResult> GetAllByProduct(
+        [FromQuery] string? categoria,
+        [FromQuery] string? producto,
+        [FromQuery] DateTime? fechaEntrada,
+        [FromQuery] int? stockMin)
     {
         var result = await _productQueryService.GetAllAsync();
+        if (!string.IsNullOrEmpty(categoria))
+            result = result.Where(x => x.Categoria == categoria);
+        if (!string.IsNullOrEmpty(producto))
+            result = result.Where(x => x.Producto == producto);
+        if (fechaEntrada.HasValue)
+            result = result.Where(x => x.FechaEntrada.Date == fechaEntrada.Value.Date);
+        if (stockMin.HasValue)
+            result = result.Where(x => x.StockMinimo <= stockMin.Value);
         return Ok(result);
     }
 
@@ -99,11 +111,26 @@ public class InventoryController : ControllerBase
     }
 
     [HttpGet("by-batch")]
-    [SwaggerOperation("Listar todos los Inventarios por Lote", OperationId = "ListInventoryByBatch")]
+    [SwaggerOperation("Listar todos los Inventarios por Lote con filtros", OperationId = "ListInventoryByBatch")]
     [SwaggerResponse(StatusCodes.Status200OK, "Lista obtenida.", typeof(IEnumerable<InventoryByBatch>))]
-    public async Task<IActionResult> GetAllByBatch()
+    public async Task<IActionResult> GetAllByBatch(
+        [FromQuery] string? producto,
+        [FromQuery] string? proveedor,
+        [FromQuery] DateTime? fechaEntrada,
+        [FromQuery] int? cantidad,
+        [FromQuery] decimal? precio)
     {
         var result = await _batchQueryService.Handle(new GetInventoryByBatchQuery());
+        if (!string.IsNullOrEmpty(producto))
+            result = result.Where(x => x.Producto == producto);
+        if (!string.IsNullOrEmpty(proveedor))
+            result = result.Where(x => x.Proveedor == proveedor);
+        if (fechaEntrada.HasValue)
+            result = result.Where(x => x.FechaEntrada.Date == fechaEntrada.Value.Date);
+        if (cantidad.HasValue)
+            result = result.Where(x => x.Cantidad == cantidad.Value);
+        if (precio.HasValue)
+            result = result.Where(x => x.Precio == precio.Value);
         return Ok(result);
     }
 
