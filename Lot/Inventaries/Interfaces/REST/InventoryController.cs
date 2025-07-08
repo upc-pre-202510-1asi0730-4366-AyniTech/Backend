@@ -99,6 +99,17 @@ public class InventoryController : ControllerBase
         return result == null ? NotFound() : Ok(result);
     }
 
+    [HttpDelete("by-product/{id}")]
+    [SwaggerOperation("Eliminar Inventario por Producto por ID", OperationId = "DeleteInventoryByProductById")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, "Inventario eliminado.")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "Inventario no encontrado.")]
+    public async Task<IActionResult> DeleteByProductById(int id)
+    {
+        var deleted = await _productCommandService.DeleteAsync(id);
+        if (!deleted) return NotFound();
+        return NoContent();
+    }
+
     // LOTES
 
     [HttpPost("by-batch")]
@@ -142,5 +153,16 @@ public class InventoryController : ControllerBase
         var list = await _batchQueryService.Handle(new GetInventoryByBatchQuery());
         var found = list.FirstOrDefault(i => i.Id == id);
         return found == null ? NotFound() : Ok(found);
+    }
+
+    [HttpDelete("by-batch/{id}")]
+    [SwaggerOperation("Eliminar Inventario por Lote por ID", OperationId = "DeleteInventoryByBatchById")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, "Inventario eliminado.")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "Inventario no encontrado.")]
+    public async Task<IActionResult> DeleteByBatchById(int id)
+    {
+        var deleted = await _batchCommandService.DeleteAsync(id);
+        if (!deleted) return NotFound();
+        return NoContent();
     }
 }

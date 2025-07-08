@@ -29,5 +29,15 @@ namespace Lot.Inventaries.Infraestructure.Persistence.EFC.Repositories
             await _context.Set<InventoryByProduct>().AddAsync(product);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteAsync(int id)
+        {
+            var entity = await _context.Set<InventoryByProduct>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<InventoryByProduct>().Remove(entity);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

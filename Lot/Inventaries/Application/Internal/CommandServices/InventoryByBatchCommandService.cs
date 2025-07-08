@@ -33,4 +33,14 @@ public class InventoryByBatchCommandService(
             return null;
         }
     }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var entity = await repository.ListAsync();
+        var found = entity.FirstOrDefault(x => x.Id == id);
+        if (found == null) return false;
+        await repository.DeleteAsync(id);
+        await unitOfWork.CompleteAsync();
+        return true;
+    }
 }

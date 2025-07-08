@@ -8,6 +8,6 @@ public interface IInventoryByProductRepository
     Task<IEnumerable<InventoryByProduct>> ListAsync();
     Task<InventoryByProduct?> FindByIdAsync(int id);
     Task AddAsync(InventoryByProduct product  );
-
+    Task DeleteAsync(int id);
 }
 

@@ -35,4 +35,13 @@ public class InventoryByProductCommandService(
             return null;
         }
     }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var entity = await repository.FindByIdAsync(id);
+        if (entity == null) return false;
+        await repository.DeleteAsync(id);
+        await unitOfWork.CompleteAsync();
+        return true;
+    }
 }

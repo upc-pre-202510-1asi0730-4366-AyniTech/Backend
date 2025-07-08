@@ -6,4 +6,5 @@ public interface IInventoryByBatchRepository
 {
     Task<IEnumerable<InventoryByBatch>> ListAsync();
     Task AddAsync(InventoryByBatch batch);
+    Task DeleteAsync(int id);
 }

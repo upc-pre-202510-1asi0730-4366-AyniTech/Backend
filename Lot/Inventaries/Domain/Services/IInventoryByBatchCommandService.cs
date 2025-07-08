@@ -7,4 +7,5 @@ namespace Lot.Inventaries.Domain.Services;
 public interface IInventoryByBatchCommandService
 {
     Task<InventoryByBatch?> Handle(CreateInventoryByBatchCommand command);
+    Task<bool> DeleteAsync(int id);
 }
