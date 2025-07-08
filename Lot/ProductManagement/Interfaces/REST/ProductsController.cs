@@ -14,7 +14,7 @@ namespace Lot.ProductManagement.Interfaces.REST;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Puntos de acceso disponibles para la gestión de productos.")]
-[AuthorizeRoles("Employee")]
+[AuthorizeRoles("Employee", "Administrator")]
 public class ProductsController(
     IProductCommandService productCommandService,
     IProductQueryService productQueryService)
